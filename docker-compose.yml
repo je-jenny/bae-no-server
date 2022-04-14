@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  node:
+    container_name: bae_nono_server
+    build:
+      context: ./
+      target: dev
+    restart: unless-stopped
+    command: npm run dev
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    networks:
+      - backend
+    volumes:
+      - type: volume
+        source: log-data
+        target: /app/logs
+    depends_on:
+      - postgres
+  postgres:
+    container_name: bae_nono_postgres
+    image: postgres:13-alpine
+    environment:
+      TZ: Asia/Seoul
+      POSTGRES_HOST: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # - ./db/initdb.d:/docker-entrypoint-initdb.d:ro
+
+networks:
+  backend:
+
+volumes:
+  log-data:
+  db_data:
