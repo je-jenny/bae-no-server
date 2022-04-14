@@ -1,0 +1,63 @@
+{
+  "name": "bae-no-server",
+  "version": "1.0.0",
+  "description": "배달비노노 서버입니다.",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "test": "jest --detectOpenHandles --forceExit --maxWorkers=50%",
+    "test:ci": "NODE_ENV=test jest --detectOpenHandles --forceExit --runInBand",
+    "build": "tsc",
+    "dev": "node ./dist/index.js",
+    "lint:es": "eslint --ext js --ext ts './'",
+    "lint:es:fix": "eslint --ext js --ext ts './' --fix",
+    "lint:etc": "prettier './**/*.{json,yaml,md}' --check",
+    "lint:etc:fix": "prettier './**/*.{json,yaml,md}' --write",
+    "lint": "npm run lint:es && npm run lint:etc",
+    "lint:fix": "npm run lint:es:fix && npm run lint:etc:fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bae-no/bae-no-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bae-no/bae-no-server/issues"
+  },
+  "homepage": "https://github.com/bae-no/bae-no-server#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "http-status-codes": "^2.2.0",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.6.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.1",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "eslint": "^8.12.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.7",
+    "prettier": "^2.6.2",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "eslint"
+    ],
+    "**/*.{json,yaml,md}": [
+      "prettier --check"
+    ]
+  }
+}
