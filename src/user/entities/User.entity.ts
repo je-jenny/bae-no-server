@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm'
 import { UserProfile } from '.'
 import { BaseEntity } from '../../common'
 
@@ -7,9 +13,13 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: false })
   email!: string
 
-  @OneToOne(() => UserProfile)
+  @OneToOne(() => UserProfile, (profile) => profile.user, {
+    nullable: false,
+    cascade: true,
+  })
+  @JoinColumn()
   profile!: UserProfile
 }

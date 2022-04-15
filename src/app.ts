@@ -1,6 +1,8 @@
+import 'reflect-metadata'
 import express, { Response, NextFunction, Request } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { logger } from './logger'
+import { userRouter } from './user/routes'
 
 export function createApp() {
   const app = express()
@@ -11,6 +13,8 @@ export function createApp() {
   app.get('/health', (_, res) => {
     res.send(ReasonPhrases.OK)
   })
+
+  app.use('/api/v1/users', userRouter)
 
   app.use('*', (_, res) => {
     res.status(StatusCodes.NOT_FOUND)

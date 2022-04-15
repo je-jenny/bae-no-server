@@ -4,7 +4,7 @@
 
 - node:16.14.2 LTS
 
-* express, PostgreSQL
+* express, PostgreSQL, TypeORM
 
 - Typescript
 

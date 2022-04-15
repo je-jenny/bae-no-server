@@ -1,14 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm'
 import { BaseEntity } from '../../common'
+import { User } from './User.entity'
 
-// eslint-disable-next-line no-shadow
-export enum ProfileProvider {
-  GOOGLE = 'google',
-  APPLE = 'apple',
-  KAKAO = 'kakao',
-  NAVER = 'naver',
-  ETC = 'etc',
-}
+export const PROFILE_PROVIDER = {
+  GOOGLE: 'google',
+  APPLE: 'apple',
+  KAKAO: 'kakao',
+  NAVER: 'naver',
+  ETC: 'etc',
+} as const
+
+export const PROFILE_PROFILE_ARRAY = Object.values(PROFILE_PROVIDER)
+export type ProfileProvider = typeof PROFILE_PROFILE_ARRAY[number]
 
 @Entity({ name: 'user_profiles' })
 export class UserProfile extends BaseEntity {
@@ -18,9 +21,16 @@ export class UserProfile extends BaseEntity {
   @Column({ length: 12 })
   nickname!: string
 
-  @Column({ type: 'enum', enum: ProfileProvider, default: ProfileProvider.ETC })
+  @Column({
+    type: 'enum',
+    enum: PROFILE_PROFILE_ARRAY,
+    default: PROFILE_PROVIDER.ETC,
+  })
   provider!: ProfileProvider
 
   @Column({ default: 0 })
   save_money!: number
+
+  @OneToOne(() => User, (user) => user.profile)
+  user!: User
 }
