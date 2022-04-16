@@ -2,8 +2,7 @@ import 'reflect-metadata'
 import Container from 'typedi'
 import { UserService } from '..'
 import { DB } from '../../../db'
-
-import { CreateUser } from '../../types'
+import { CreateUserDto } from '../../dtos'
 
 const db = Container.get(DB)
 beforeAll(async () => {
@@ -22,10 +21,12 @@ describe('create-user service test', () => {
   const userService = Container.get(UserService)
 
   it('유저 생성 성공 시, 유저 객체 반환', async () => {
-    const data: CreateUser = {
-      user: { email: 'ehgks0083@gmail.com' },
-      profile: { nickname: 'dohan', provider: 'google' },
+    const data: CreateUserDto = {
+      email: 'ehgks0083@gmail.com',
+      nickname: 'dohan',
+      provider: 'google',
     }
+    const { email, ...restProfile } = data
 
     const spy = jest.spyOn(userService, 'createUser')
 
@@ -33,7 +34,8 @@ describe('create-user service test', () => {
 
     expect(spy).toBeCalledTimes(1)
     expect(spy).toBeCalledWith(data)
-    expect(restUser).toEqual(expect.objectContaining(data.user))
-    expect(profile).toEqual(expect.objectContaining(data.profile))
+
+    expect(profile).toEqual(expect.objectContaining(restProfile))
+    expect(restUser).toEqual(expect.objectContaining({ email }))
   })
 })

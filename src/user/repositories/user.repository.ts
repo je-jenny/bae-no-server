@@ -1,6 +1,6 @@
 import { Service } from 'typedi'
-import { CreateUser } from '..'
 import { DB } from '../../db'
+import { CreateUserDto } from '../dtos'
 import { User, UserProfile } from '../entities'
 
 @Service()
@@ -11,7 +11,7 @@ export class UserRepository {
     this.userRespotiry = this.db.AppdataSource.getRepository(User)
   }
 
-  createUser({ user: { email }, profile: { nickname, provider } }: CreateUser) {
+  createUser({ email, nickname, provider }: CreateUserDto) {
     const profile = new UserProfile()
     profile.nickname = nickname
     profile.provider = provider

@@ -9,7 +9,7 @@ async function main() {
   await db.typeOrmInitialize()
 
   createApp().listen(PORT, () => {
-    logger.info(`HTTP Server is listening on ${PORT}`)
+    logger.info(`HTTP Server is listening on ${PORT}, ${process.env.NODE_ENV}`)
   })
 }
 

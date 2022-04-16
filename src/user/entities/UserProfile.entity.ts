@@ -18,7 +18,7 @@ export class UserProfile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ length: 12 })
+  @Column({ length: 12, unique: true })
   nickname!: string
 
   @Column({
