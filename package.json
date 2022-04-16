@@ -27,6 +27,8 @@
   },
   "homepage": "https://github.com/bae-no/bae-no-server#readme",
   "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "express": "^4.17.3",
     "http-status-codes": "^2.2.0",
     "pg": "^8.7.3",
