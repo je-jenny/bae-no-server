@@ -1,6 +1,11 @@
-import express, { Response, NextFunction, Request } from 'express'
+import 'reflect-metadata'
+import express from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
-import { logger } from './logger'
+import { userRouter } from './user/routes'
+import {
+  logExErrorMiddleware,
+  logInternalServerErrorMiddleware,
+} from './middlewares'
 
 export function createApp() {
   const app = express()
@@ -12,17 +17,15 @@ export function createApp() {
     res.send(ReasonPhrases.OK)
   })
 
+  app.use('/api/v1/users', userRouter)
+
   app.use('*', (_, res) => {
     res.status(StatusCodes.NOT_FOUND)
     res.send(ReasonPhrases.NOT_FOUND)
   })
 
-  app.use((err: any, _: Request, res: Response, __: NextFunction) => {
-    logger.error(JSON.stringify(err))
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: `SERVER_ERROR` })
-  })
+  app.use(logExErrorMiddleware)
+  app.use(logInternalServerErrorMiddleware)
 
   return app
 }

@@ -16,5 +16,6 @@ const config: Config.InitialOptions = {
     },
   },
   testTimeout: 30000,
+  setupFilesAfterEnv: ['./jest.setup.logger.ts'],
 }
 export default config
