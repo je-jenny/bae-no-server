@@ -43,7 +43,6 @@ describe('create user api test', () => {
     it('In valid provider (enum type)', async () => {
       const body = {
         email: 'test@gmail.com',
-        nickname: 'nick',
         provider: 'in valid',
       }
       const res = await request(await createApp())
@@ -56,7 +55,6 @@ describe('create user api test', () => {
     it('return user', async () => {
       const body: CreateUserDto = {
         email: 'tset@gmail.com',
-        nickname: 'nick',
         provider: PROFILE_PROVIDER.APPLE,
       }
       const res = await request(await createApp())

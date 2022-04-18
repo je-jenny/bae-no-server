@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToOne,
-  JoinColumn,
+  //   JoinColumn,
 } from 'typeorm'
 import { UserProfile } from '.'
 import { BaseEntity } from '../../common'
@@ -17,9 +17,8 @@ export class User extends BaseEntity {
   email!: string
 
   @OneToOne(() => UserProfile, (profile) => profile.user, {
-    nullable: false,
-    cascade: true,
+    cascade: ['insert', 'update', 'soft-remove'],
   })
-  @JoinColumn()
+  //   @OneToOne(() => UserProfile, (profile) => profile.user, { cascade: true })
   profile!: UserProfile
 }

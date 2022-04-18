@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm'
 import { BaseEntity } from '../../common'
 import { User } from './User.entity'
 
@@ -18,8 +24,8 @@ export class UserProfile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ length: 12, unique: true })
-  nickname!: string
+  @Column({ length: 12, nullable: true, unique: true })
+  nickname?: string
 
   @Column({
     type: 'enum',
@@ -28,9 +34,20 @@ export class UserProfile extends BaseEntity {
   })
   provider!: ProfileProvider
 
+  @Column({ length: 12, nullable: true, unique: true })
+  phone_number?: string
+
   @Column({ default: 0 })
   save_money!: number
 
-  @OneToOne(() => User, (user) => user.profile)
+  @Column()
+  userId!: number
+
+  @OneToOne(() => User, (user) => user.profile, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    orphanedRowAction: 'soft-delete',
+  })
+  @JoinColumn()
   user!: User
 }
