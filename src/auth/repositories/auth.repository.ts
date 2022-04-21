@@ -30,10 +30,6 @@ export class VerificationRepository {
       .execute()
 
     return plainToInstance(VerificationReturnDto, result.raw[0])
-    // const verification = new Verification()
-    // verification.phone_number = phoneNumber
-    // verification.code = code
-    // return this.verificationRepository.save(verification)
   }
 
   findVerificationById(id: number) {

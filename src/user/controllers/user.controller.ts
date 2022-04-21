@@ -69,13 +69,20 @@ export class UserController implements IUserController {
     if (errors) {
       throw new BadReqError(JSON.stringify(errors))
     }
-    const updatedUser = await this.userService.updateUserProfile(user.id, body)
+    const updatedUserProfile = await this.userService.updateUserProfile(
+      user.id,
+      body
+    )
 
-    if (!updatedUser.affected) {
-      throw new BadReqError()
+    if (!updatedUserProfile) {
+      throw new NotFoundError()
     }
 
-    res.json({ success: true, error: null, response: null })
+    res.json({
+      success: true,
+      error: null,
+      response: { profile: updatedUserProfile },
+    })
   }
 
   deleteUser = async (

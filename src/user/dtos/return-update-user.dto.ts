@@ -1,10 +1,13 @@
 import { Exclude, Expose } from 'class-transformer'
 
 @Exclude()
-export class VerificationReturnDto {
+export class UpdatedUserReturnDto {
   @Expose()
   id!: number
 
   @Expose()
-  code!: string
+  nickname!: string
+
+  @Expose()
+  phone_number!: string
 }

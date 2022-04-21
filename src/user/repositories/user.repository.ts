@@ -1,6 +1,11 @@
+import { plainToInstance } from 'class-transformer'
 import { Service } from 'typedi'
 import { DB } from '../../db'
-import { CreateUserDto, UpdateUserProfileDto } from '../dtos'
+import {
+  CreateUserDto,
+  UpdatedUserReturnDto,
+  UpdateUserProfileDto,
+} from '../dtos'
 import { User, UserProfile } from '../entities'
 
 @Service()
@@ -41,13 +46,17 @@ export class UserRepository {
       .getOne()
   }
 
-  updateUserProfile(userId: number, data: UpdateUserProfileDto) {
-    return this.userProfileRespotiry
+  async updateUserProfile(userId: number, data: UpdateUserProfileDto) {
+    const result = await this.userProfileRespotiry
       .createQueryBuilder()
       .update(UserProfile)
       .set(data)
       .where('userId = :userId', { userId })
+      .returning(['id', 'nickname', 'phone_number'])
+      .updateEntity(true)
       .execute()
+
+    return plainToInstance(UpdatedUserReturnDto, result.raw[0])
   }
 
   deleteUser(id: number) {

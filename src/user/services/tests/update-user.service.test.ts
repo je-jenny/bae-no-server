@@ -3,7 +3,7 @@ import Container from 'typedi'
 import { QueryFailedError } from 'typeorm'
 import { UserService } from '..'
 import { DB } from '../../../db'
-import { CreateUserDto } from '../../dtos'
+import { CreateUserDto, UpdatedUserReturnDto } from '../../dtos'
 
 const db = Container.get(DB)
 beforeAll(async () => {
@@ -63,6 +63,7 @@ describe('update-user service test', () => {
     expect(spy).toBeCalledTimes(1)
     expect(spy).toBeCalledWith(user.id, { nickname })
 
-    expect(updatedUser.affected).toBe(1)
+    expect(updatedUser instanceof UpdatedUserReturnDto).toBeTruthy()
+    expect(updatedUser).toEqual(expect.objectContaining({ nickname }))
   })
 })

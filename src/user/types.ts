@@ -1,7 +1,11 @@
 import { Request, Response } from 'express'
 import { UpdateResult } from 'typeorm'
 import { User } from '.'
-import { CreateUserDto, UpdateUserProfileDto } from './dtos'
+import {
+  CreateUserDto,
+  UpdatedUserReturnDto,
+  UpdateUserProfileDto,
+} from './dtos'
 
 export interface IUserController {
   createUser(req: Request, res: Response): Promise<void>
@@ -16,7 +20,7 @@ export interface IUserService {
   updateUserProfile(
     id: number,
     data: UpdateUserProfileDto
-  ): Promise<UpdateResult>
+  ): Promise<UpdatedUserReturnDto>
 
   deleteUser(id: number): Promise<UpdateResult>
 }

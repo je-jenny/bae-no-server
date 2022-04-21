@@ -70,7 +70,7 @@ export class AuthController implements IAuthController {
       phoneNumber: verification.phone_number,
     })
 
-    if (!updatedUser.affected) {
+    if (!updatedUser) {
       throw new NotFoundError()
     }
 

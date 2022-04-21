@@ -53,7 +53,7 @@ describe('update user api test', () => {
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
     })
 
-    it('수정된 유저가 없으면, 400 반환', async () => {
+    it('수정된 유저가 없으면, 404 반환', async () => {
       const params = '1'
       const body = { nickname: '닉넴1' }
 
@@ -61,7 +61,7 @@ describe('update user api test', () => {
         .patch(`${URL}/${params}`)
         .send(body)
 
-      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      expect(res.status).toBe(StatusCodes.NOT_FOUND)
     })
 
     it('성공 시, 200 반환', async () => {
