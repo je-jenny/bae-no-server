@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
+import { plainToInstance } from 'class-transformer'
 import { Service } from 'typedi'
 import { DB } from '../../db'
+import { VerificationReturnDto } from '../dtos'
 import { Verification } from '../entities'
 
 @Service()
@@ -12,17 +14,26 @@ export class VerificationRepository {
       this.db.AppdataSource.getRepository(Verification)
   }
 
-  createVerification = ({
-    phoneNumber,
+  createVerification = async ({
+    phoneNumber: phone_number,
     code,
   }: {
     phoneNumber: string
     code: string
   }) => {
-    const verification = new Verification()
-    verification.phone_number = phoneNumber
-    verification.code = code
-    return this.verificationRepository.save(verification)
+    const result = await this.verificationRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Verification)
+      .values([{ phone_number, code }])
+      .returning(['id', 'code'])
+      .execute()
+
+    return plainToInstance(VerificationReturnDto, result.raw[0])
+    // const verification = new Verification()
+    // verification.phone_number = phoneNumber
+    // verification.code = code
+    // return this.verificationRepository.save(verification)
   }
 
   findVerificationById(id: number) {

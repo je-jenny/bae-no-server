@@ -3,6 +3,7 @@ import Container from 'typedi'
 import { QueryFailedError } from 'typeorm'
 import { DB } from '../../../db'
 import { AuthService } from '..'
+import { VerificationReturnDto } from '../../dtos'
 
 const db = Container.get(DB)
 beforeAll(async () => {
@@ -20,7 +21,7 @@ afterAll(async () => {
 describe('create-verification service test', () => {
   const authService = Container.get(AuthService)
 
-  it('생성 성공 시, verification 객체 반환', async () => {
+  it('생성 성공 시, VerificationReturnDto 객체 반환', async () => {
     const phoneNumber = '01012345678'
     const spy = jest.spyOn(authService, 'createVerification')
 
@@ -29,7 +30,7 @@ describe('create-verification service test', () => {
     expect(spy).toBeCalledTimes(1)
     expect(spy).toBeCalledWith({ phoneNumber })
 
-    expect(found.phone_number).toBe(phoneNumber)
+    expect(found instanceof VerificationReturnDto).toBeTruthy()
   })
 
   it('번호가 13자 이상이면, 에러 반환', async () => {

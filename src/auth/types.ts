@@ -1,5 +1,6 @@
 import { Response, Request } from 'express'
 import { DeleteResult } from 'typeorm'
+import { VerificationReturnDto } from '.'
 import { Verification } from './entities'
 
 export interface IAuthService {
@@ -7,7 +8,7 @@ export interface IAuthService {
     phoneNumber,
   }: {
     phoneNumber: string
-  }) => Promise<Verification>
+  }) => Promise<VerificationReturnDto>
 
   findVerificationById(id: number): Promise<Verification | null>
 

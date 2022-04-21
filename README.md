@@ -1,12 +1,18 @@
 # 배달비노노 서버 레파지토리
 
+## API 문서
+
+[링크](https://gold-leader-e42.notion.site/API-db6f712e5b9943dcb7d0953929f403e4)
+
 ## 사용스택
 
 - node:16.14.2 LTS
 
-* express, PostgreSQL, TypeORM
+* express, PostgreSQL, TypeORM, Redis
 
 - Typescript
+
+* docker, docker-compose
 
 ## 실행 방법
 
