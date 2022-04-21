@@ -19,6 +19,5 @@ export class User extends BaseEntity {
   @OneToOne(() => UserProfile, (profile) => profile.user, {
     cascade: ['insert', 'update', 'soft-remove'],
   })
-  //   @OneToOne(() => UserProfile, (profile) => profile.user, { cascade: true })
   profile!: UserProfile
 }
