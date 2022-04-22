@@ -1,5 +1,6 @@
 import type { DataSourceOptions } from 'typeorm'
 import type { _StrategyOptionsBase } from 'passport-google-oauth20'
+import { StrategyOption } from 'passport-kakao'
 
 export const PORT = process.env.PORT || 3000
 
@@ -62,6 +63,14 @@ export const GOOGLE_CONFIG: _StrategyOptionsBase = {
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   callbackURL:
     process.env.GOOGLE_CALLBACK_URL ||
+    'http://www.example.com/auth/google/callback',
+}
+
+export const KAKAO_CONFIG: StrategyOption = {
+  clientID: process.env.KAKAO_CLIENT_ID || '',
+  clientSecret: '',
+  callbackURL:
+    process.env.KAKAO_CALLBACK_URL ||
     'http://www.example.com/auth/google/callback',
 }
 

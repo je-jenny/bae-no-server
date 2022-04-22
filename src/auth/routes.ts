@@ -27,4 +27,15 @@ authRouter.get(
   }
 )
 
+authRouter.get('/kakao', passport.authenticate('kakao'))
+authRouter.get(
+  '/kakao/callback',
+  passport.authenticate('kakao', {
+    failureRedirect: '/',
+  }),
+  (_, res) => {
+    res.redirect('/')
+  }
+)
+
 export { authRouter }
