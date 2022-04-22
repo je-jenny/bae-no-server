@@ -3,20 +3,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { QueryFailedError } from 'typeorm/error/QueryFailedError'
 import { HttpError } from '../http-error.class'
 import { logger } from '../logger'
-
-function replaceErrors(_: any, value: any[]) {
-  if (value instanceof Error) {
-    const error: Record<any, any> = {}
-
-    Object.getOwnPropertyNames(value).forEach(function (propName: any) {
-      error[propName] = value[propName]
-    })
-
-    return error
-  }
-
-  return value
-}
+import { replaceErrors } from '../utils'
 
 export function logHttpErrorMiddleware(
   err: any,
@@ -68,7 +55,6 @@ export function logInternalServerErrorMiddleware(
   res: Response,
   __: NextFunction
 ) {
-  console.log('eee :', JSON.stringify(err))
   logger.error(JSON.stringify(err, replaceErrors))
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     success: false,

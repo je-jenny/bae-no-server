@@ -53,6 +53,7 @@ export const SESSION_OPTION = {
   resave: false,
   cookie: {
     maxAge: COOKIE_MAX_AGE,
+    saveUninitialized: false,
     secure: false,
     httpOnly: true,
   },

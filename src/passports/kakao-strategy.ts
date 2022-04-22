@@ -11,7 +11,7 @@ export default () => {
   passport.use(
     new KakaoStrategy(
       { ...KAKAO_CONFIG },
-      async (_accessToken, _refreshToken, profile, cb) => {
+      async (accessToken, _refreshToken, profile, cb) => {
         // eslint-disable-next-line no-underscore-dangle
         const { has_email, email } = profile._json.kakao_account
         if (!has_email || !email) {
@@ -24,11 +24,9 @@ export default () => {
             email,
             provider: PROFILE_PROVIDER.KAKAO,
           })
-
-          return cb(null, createdUser)
+          return cb(null, { ...createdUser, accessToken })
         }
-
-        return cb(null, user)
+        return cb(null, { ...user, accessToken })
       }
     )
   )
