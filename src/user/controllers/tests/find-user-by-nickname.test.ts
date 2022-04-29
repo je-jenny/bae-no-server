@@ -30,6 +30,15 @@ describe('find user by id test', () => {
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     })
 
+    it('nickname 길이가 16 넘으면, 400 반환', async () => {
+      const nickname = '12345678901234567'
+      const res = await request(await createApp())
+        .get(`${URL}`)
+        .send({ nickname })
+
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    })
+
     it('nickname이 없으면, 404 반환', async () => {
       const nickname = 'kim'
       const res = await request(await createApp())

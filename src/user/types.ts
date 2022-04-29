@@ -7,11 +7,11 @@ import {
   UpdatedUserReturnDto,
   UpdateUserProfileDto,
 } from './dtos'
-import { UserProfile } from './entities'
 
 export interface IUserController {
   createUser(req: Request, res: Response): Promise<void>
   findUserById(req: Request, res: Response): Promise<void>
+  findUserByNickName(req: Request, res: Response): Promise<void>
   updateUserProfile(req: Request, res: Response): Promise<void>
   deleteUser(req: Request, res: Response): Promise<void>
 }
@@ -21,7 +21,7 @@ export interface IUserService {
   findUserById(id: number): Promise<User | null>
   findUserByNickName({
     nickname,
-  }: FindUserByNickNameDto): Promise<UserProfile | null>
+  }: FindUserByNickNameDto): Promise<FindUserByNickNameDto | null>
   updateUserProfile(
     id: number,
     data: UpdateUserProfileDto

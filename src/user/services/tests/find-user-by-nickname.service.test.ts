@@ -1,6 +1,5 @@
 import 'reflect-metadata'
 import Container from 'typedi'
-import { TypeORMError } from 'typeorm'
 import { UserService } from '..'
 import { DB } from '../../../db'
 import { CreateUserDto } from '../../dtos'
@@ -34,13 +33,13 @@ describe('find-user-by-nickname service test', () => {
 
     const spy = jest.spyOn(userService, 'findUserByNickName')
 
-    const user = await userService.findUserByNickName({ nickname })
+    const result = await userService.findUserByNickName({ nickname })
 
     expect(spy).toBeCalledTimes(1)
     expect(spy).toBeCalledWith({ nickname })
 
-    expect(user).not.toBeNull()
-    expect(user.nickname).toBe(nickname)
+    expect(result).not.toBeNull()
+    expect(result.nickname).toBe(nickname)
   })
 
   it('nickname 조회 실패 시, TypeORMError 반환', async () => {
@@ -55,14 +54,10 @@ describe('find-user-by-nickname service test', () => {
 
     const spy = jest.spyOn(userService, 'findUserByNickName')
 
-    try {
-      await userService.findUserByNickName({ nickname })
-      throw new Error('it should not reach here')
-    } catch (e) {
-      expect(spy).toBeCalledTimes(1)
-      expect(spy).toBeCalledWith({ nickname })
+    const result = await userService.findUserByNickName({ nickname })
+    expect(spy).toBeCalledTimes(1)
+    expect(spy).toBeCalledWith({ nickname })
 
-      expect(e).toBeInstanceOf(TypeORMError)
-    }
+    expect(result).toBeNull()
   })
 })

@@ -1,12 +1,15 @@
 /* eslint-disable camelcase */
-import { IsNotEmpty, IsString } from 'class-validator'
+import { Expose } from 'class-transformer'
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 export class FindUserByNickNameDto {
+  @Expose()
   @IsNotEmpty()
   @IsString()
+  @MaxLength(16)
   nickname!: string
 
-  constructor({ nickname }: { nickname: string }) {
-    this.nickname = nickname
-  }
+  //   constructor({ nickname }: { nickname: string }) {
+  //     this.nickname = nickname
+  //   }
 }

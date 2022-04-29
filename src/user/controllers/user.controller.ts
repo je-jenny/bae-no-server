@@ -1,5 +1,6 @@
 import { Service } from 'typedi'
 import { Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
 import { IUserController } from '..'
 import {
   BadReqError,
@@ -57,18 +58,24 @@ export class UserController implements IUserController {
     { body }: Request<unknown, unknown, FindUserByNickNameDto>,
     res: Response
   ) => {
-    const errors = await validateDtos(new FindUserByNickNameDto(body))
+    const errors = await validateDtos(
+      plainToInstance(FindUserByNickNameDto, body)
+    )
     if (errors) {
       throw new BadReqError(JSON.stringify(errors))
     }
 
-    const found = await this.userService.findUserByNickName(body)
+    const result = await this.userService.findUserByNickName(body)
 
-    if (!found) {
+    if (!result) {
       throw new NotFoundError()
     }
 
-    res.json({ success: true, error: null, response: { user: found } })
+    res.json({
+      success: true,
+      error: null,
+      response: { nickname: result.nickname },
+    })
   }
 
   updateUserProfile = async (

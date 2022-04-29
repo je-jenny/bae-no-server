@@ -3,6 +3,7 @@ import { Service } from 'typedi'
 import { DB } from '../../db'
 import {
   CreateUserDto,
+  FindUserByNickNameDto,
   UpdatedUserReturnDto,
   UpdateUserProfileDto,
 } from '../dtos'
@@ -39,11 +40,14 @@ export class UserRepository {
       .getOne()
   }
 
-  findUserByNickName(nickname: string) {
-    return this.userProfileRespotiry
+  async findUserByNickName(nickname: string) {
+    const result = await this.userProfileRespotiry
       .createQueryBuilder('profile')
+      .select(['profile.nickname'])
       .where('profile.nickname = :nickname', { nickname })
       .getOne()
+
+    return plainToInstance(FindUserByNickNameDto, result)
   }
 
   findUserByEmail(email: string) {
