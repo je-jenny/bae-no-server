@@ -39,6 +39,13 @@ export class UserRepository {
       .getOne()
   }
 
+  findUserByNickName(nickname: string) {
+    return this.userProfileRespotiry
+      .createQueryBuilder('profile')
+      .where('profile.nickname = :nickname', { nickname })
+      .getOneOrFail()
+  }
+
   findUserByEmail(email: string) {
     return this.userRespotiry
       .createQueryBuilder('user')
