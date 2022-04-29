@@ -3,6 +3,7 @@ import { IUserService } from '..'
 import {
   CreateUserDto,
   FindUserByEmailDto,
+  FindUserByNickNameDto,
   UpdateUserProfileDto,
 } from '../dtos'
 import { UserRepository } from '../repositories'
@@ -24,7 +25,7 @@ export class UserService implements IUserService {
     return this.userRepository.findUserByEmail(email)
   }
 
-  findUserByNickName(nickname: string) {
+  findUserByNickName({ nickname }: FindUserByNickNameDto) {
     return this.userRepository.findUserByNickName(nickname)
   }
 

@@ -7,7 +7,11 @@ import {
   UnauthorizedError,
 } from '../../http-error.class'
 import { validateDtos } from '../../validate-dtos'
-import { CreateUserDto, UpdateUserProfileDto } from '../dtos'
+import {
+  CreateUserDto,
+  FindUserByNickNameDto,
+  UpdateUserProfileDto,
+} from '../dtos'
 import { UserService } from '../services'
 
 @Service()
@@ -45,6 +49,20 @@ export class UserController implements IUserController {
     if (!found) {
       throw new NotFoundError()
     }
+
+    res.json({ success: true, error: null, response: { user: found } })
+  }
+
+  findUserByNickName = async (
+    { body }: Request<unknown, unknown, FindUserByNickNameDto>,
+    res: Response
+  ) => {
+    const errors = await validateDtos(new FindUserByNickNameDto(body))
+    if (errors) {
+      throw new BadReqError(JSON.stringify(errors))
+    }
+
+    const found = await this.userService.findUserByNickName(body)
 
     res.json({ success: true, error: null, response: { user: found } })
   }

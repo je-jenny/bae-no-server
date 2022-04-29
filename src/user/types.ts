@@ -3,6 +3,7 @@ import { UpdateResult } from 'typeorm'
 import { User } from '.'
 import {
   CreateUserDto,
+  FindUserByNickNameDto,
   UpdatedUserReturnDto,
   UpdateUserProfileDto,
 } from './dtos'
@@ -18,7 +19,7 @@ export interface IUserController {
 export interface IUserService {
   createUser(data: CreateUserDto): Promise<User>
   findUserById(id: number): Promise<User | null>
-  findUserByNickName(nickname: string): Promise<UserProfile>
+  findUserByNickName({ nickname }: FindUserByNickNameDto): Promise<UserProfile>
   updateUserProfile(
     id: number,
     data: UpdateUserProfileDto
