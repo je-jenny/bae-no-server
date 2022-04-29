@@ -9,7 +9,7 @@ const userRouter = Router()
 
 userRouter
   .get('/:id', isAuthenticate, wrap(userController.findUserById))
-  //   .post('', wrap(userController.createUser))
+  .get('', wrap(userController.findUserByNickName))
   .patch('/:id', isAuthenticate, wrap(userController.updateUserProfile))
   .delete('/:id', isAuthenticate, wrap(userController.deleteUser))
 
