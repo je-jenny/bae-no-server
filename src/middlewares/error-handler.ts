@@ -1,6 +1,6 @@
 import { Response, NextFunction, Request } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
-import { QueryFailedError } from 'typeorm/error/QueryFailedError'
+import { TypeORMError } from 'typeorm/error/TypeORMError'
 import { HttpError } from '../http-error.class'
 import { logger } from '../logger'
 import { replaceErrors } from '../utils'
@@ -33,7 +33,7 @@ export function logDBErrorMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  if (err instanceof QueryFailedError) {
+  if (err instanceof TypeORMError) {
     logger.error(JSON.stringify(err))
     res.status(StatusCodes.INTERNAL_SERVER_ERROR)
     res.json({
