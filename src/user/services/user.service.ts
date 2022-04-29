@@ -24,6 +24,10 @@ export class UserService implements IUserService {
     return this.userRepository.findUserByEmail(email)
   }
 
+  findUserByNickName(nickname: string) {
+    return this.userRepository.findUserByNickName(nickname)
+  }
+
   updateUserProfile(id: number, data: UpdateUserProfileDto) {
     return this.userRepository.updateUserProfile(id, data)
   }

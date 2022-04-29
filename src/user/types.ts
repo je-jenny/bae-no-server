@@ -6,6 +6,7 @@ import {
   UpdatedUserReturnDto,
   UpdateUserProfileDto,
 } from './dtos'
+import { UserProfile } from './entities'
 
 export interface IUserController {
   createUser(req: Request, res: Response): Promise<void>
@@ -17,6 +18,7 @@ export interface IUserController {
 export interface IUserService {
   createUser(data: CreateUserDto): Promise<User>
   findUserById(id: number): Promise<User | null>
+  findUserByNickName(nickname: string): Promise<UserProfile>
   updateUserProfile(
     id: number,
     data: UpdateUserProfileDto
