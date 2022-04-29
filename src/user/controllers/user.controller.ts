@@ -64,6 +64,10 @@ export class UserController implements IUserController {
 
     const found = await this.userService.findUserByNickName(body)
 
+    if (!found) {
+      throw new NotFoundError()
+    }
+
     res.json({ success: true, error: null, response: { user: found } })
   }
 

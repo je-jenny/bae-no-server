@@ -19,7 +19,9 @@ export interface IUserController {
 export interface IUserService {
   createUser(data: CreateUserDto): Promise<User>
   findUserById(id: number): Promise<User | null>
-  findUserByNickName({ nickname }: FindUserByNickNameDto): Promise<UserProfile>
+  findUserByNickName({
+    nickname,
+  }: FindUserByNickNameDto): Promise<UserProfile | null>
   updateUserProfile(
     id: number,
     data: UpdateUserProfileDto

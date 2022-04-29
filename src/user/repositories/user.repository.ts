@@ -43,7 +43,7 @@ export class UserRepository {
     return this.userProfileRespotiry
       .createQueryBuilder('profile')
       .where('profile.nickname = :nickname', { nickname })
-      .getOneOrFail()
+      .getOne()
   }
 
   findUserByEmail(email: string) {
