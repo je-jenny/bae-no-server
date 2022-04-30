@@ -4,7 +4,9 @@ import { User } from '.'
 import {
   CreateUserDto,
   FindUserByNickNameDto,
+  UpdatedUserLongLatiReturnDto,
   UpdatedUserReturnDto,
+  UpdateUserProfileCoordinateDto,
   UpdateUserProfileDto,
 } from './dtos'
 
@@ -13,6 +15,7 @@ export interface IUserController {
   findUserById(req: Request, res: Response): Promise<void>
   findUserByNickName(req: Request, res: Response): Promise<void>
   updateUserProfile(req: Request, res: Response): Promise<void>
+  updateUserProfileCoordinate(req: Request, res: Response): Promise<void>
   deleteUser(req: Request, res: Response): Promise<void>
 }
 
@@ -26,6 +29,11 @@ export interface IUserService {
     id: number,
     data: UpdateUserProfileDto
   ): Promise<UpdatedUserReturnDto>
+
+  updateUserProfileCoordinate(
+    id: number,
+    data: UpdateUserProfileCoordinateDto
+  ): Promise<UpdatedUserLongLatiReturnDto>
 
   deleteUser(id: number): Promise<UpdateResult>
 }

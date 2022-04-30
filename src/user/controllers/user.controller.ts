@@ -11,6 +11,7 @@ import { validateDtos } from '../../validate-dtos'
 import {
   CreateUserDto,
   FindUserByNickNameDto,
+  UpdateUserProfileCoordinateDto,
   UpdateUserProfileDto,
 } from '../dtos'
 import { UserService } from '../services'
@@ -102,6 +103,34 @@ export class UserController implements IUserController {
       user.id,
       body
     )
+
+    if (!updatedUserProfile) {
+      throw new NotFoundError()
+    }
+
+    res.json({
+      success: true,
+      error: null,
+      response: { profile: updatedUserProfile },
+    })
+  }
+
+  updateUserProfileCoordinate = async (
+    { body, user }: Request<unknown, unknown, UpdateUserProfileCoordinateDto>,
+    res: Response
+  ) => {
+    if (!user) {
+      throw new UnauthorizedError()
+    }
+
+    const errors = await validateDtos(
+      plainToInstance(UpdateUserProfileCoordinateDto, body)
+    )
+    if (errors) {
+      throw new BadReqError(JSON.stringify(errors))
+    }
+    const updatedUserProfile =
+      await this.userService.updateUserProfileCoordinate(user.id, body)
 
     if (!updatedUserProfile) {
       throw new NotFoundError()

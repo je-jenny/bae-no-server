@@ -4,6 +4,7 @@ import {
   CreateUserDto,
   FindUserByEmailDto,
   FindUserByNickNameDto,
+  UpdateUserProfileCoordinateDto,
   UpdateUserProfileDto,
 } from '../dtos'
 import { UserRepository } from '../repositories'
@@ -35,7 +36,7 @@ export class UserService implements IUserService {
 
   updateUserProfileCoordinate(
     id: number,
-    data: { longitude: number; latitude: number }
+    data: UpdateUserProfileCoordinateDto
   ) {
     return this.userRepository.updateUserProfileCoordinate(id, data)
   }
