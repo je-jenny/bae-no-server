@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes'
 import { createApp } from '../../../app'
 import { DB } from '../../../db'
 import { PROFILE_PROVIDER } from '../../entities'
-import { CreateUserDto, UpdateUserProfileCoordinateDto } from '../../dtos'
+import { CreateUserAddressDto, CreateUserDto } from '../../dtos'
 import { UserService } from '../..'
 
 const db = Container.get(DB)
@@ -21,27 +21,32 @@ afterAll(async () => {
   await db.typeOrmClose()
 })
 
-describe('update-user-profile-coordinate api test', () => {
-  describe('PATCH /api/v1/users/coordinate', () => {
-    const URL = '/api/v1/users/coordinate'
+describe('create-user-address api test', () => {
+  describe('POST /api/v1/users/address', () => {
+    const URL = '/api/v1/users/address'
 
     it('Req Body가 유효하지 않으면, 400 반환', async () => {
-      const body = { longitude: '12글자넘는닉네임입니다.' }
+      const body = { longitude: 'in valid type' }
       const res = await request(await createApp())
-        .patch(URL)
+        .post(URL)
         .send(body)
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     })
 
-    it('수정된 유저가 없으면, 404 반환', async () => {
-      const body: UpdateUserProfileCoordinateDto = { longitude: 1, latitude: 2 }
-
+    it('Req Body longitude 소숫점이 14자리 넘으면, 400 반환', async () => {
+      const body: CreateUserAddressDto = {
+        name: '집',
+        place: '서울시 강서구',
+        // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+        longitude: 1.1234123412341234,
+        latitude: 2.123,
+      }
       const res = await request(await createApp())
-        .patch(URL)
+        .post(URL)
         .send(body)
 
-      expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     })
 
     it('성공 시, 200 반환', async () => {
@@ -52,9 +57,14 @@ describe('update-user-profile-coordinate api test', () => {
       }
       await userService.createUser(data)
 
-      const body: UpdateUserProfileCoordinateDto = { longitude: 1, latitude: 2 }
+      const body: CreateUserAddressDto = {
+        name: '집',
+        place: '서울시 강서구',
+        longitude: 1.123,
+        latitude: 2.123,
+      }
       const res = await request(await createApp())
-        .patch(URL)
+        .post(URL)
         .send(body)
 
       expect(res.status).toBe(StatusCodes.OK)

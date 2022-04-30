@@ -9,9 +9,9 @@ import {
 } from '../../http-error.class'
 import { validateDtos } from '../../validate-dtos'
 import {
-  CreateUserDto,
+  CreateUserAddressDto,
   FindUserByNickNameDto,
-  UpdateUserProfileCoordinateDto,
+  UpdateUserAddressDto,
   UpdateUserProfileDto,
 } from '../dtos'
 import { UserService } from '../services'
@@ -20,19 +20,20 @@ import { UserService } from '../services'
 export class UserController implements IUserController {
   constructor(private readonly userService: UserService) {}
 
-  createUser = async (
-    { body }: Request<unknown, unknown, CreateUserDto>,
-    res: Response
-  ) => {
-    const errors = await validateDtos(new CreateUserDto(body))
-    if (errors) {
-      throw new BadReqError(JSON.stringify(errors))
-    }
+  // TODO 미사용
+  //   createUser = async (
+  //     { body }: Request<unknown, unknown, CreateUserDto>,
+  //     res: Response
+  //   ) => {
+  //     const errors = await validateDtos(new CreateUserDto(body))
+  //     if (errors) {
+  //       throw new BadReqError(JSON.stringify(errors))
+  //     }
 
-    const user = await this.userService.createUser(body)
+  //     const user = await this.userService.createUser(body)
 
-    res.json({ success: true, error: null, response: { user } })
-  }
+  //     res.json({ success: true, error: null, response: { user } })
+  //   }
 
   findUserById = async (
     { params: { id }, user }: Request<{ id?: string }>,
@@ -56,26 +57,32 @@ export class UserController implements IUserController {
   }
 
   findUserByNickName = async (
-    { body }: Request<unknown, unknown, FindUserByNickNameDto>,
+    {
+      query,
+      query: { nickname },
+    }: Request<unknown, unknown, unknown, { nickname?: string }>,
     res: Response
   ) => {
+    if (!nickname) {
+      throw new BadReqError()
+    }
     const errors = await validateDtos(
-      plainToInstance(FindUserByNickNameDto, body)
+      plainToInstance(FindUserByNickNameDto, query)
     )
     if (errors) {
       throw new BadReqError(JSON.stringify(errors))
     }
 
-    const result = await this.userService.findUserByNickName(body)
+    const result = await this.userService.findUserByNickName(nickname)
 
-    if (!result) {
-      throw new NotFoundError()
+    if (result) {
+      throw new BadReqError('Already exists')
     }
 
     res.json({
       success: true,
       error: null,
-      response: { nickname: result.nickname },
+      response: null,
     })
   }
 
@@ -115,8 +122,8 @@ export class UserController implements IUserController {
     })
   }
 
-  updateUserProfileCoordinate = async (
-    { body, user }: Request<unknown, unknown, UpdateUserProfileCoordinateDto>,
+  createUserAddress = async (
+    { body, user }: Request<unknown, unknown, CreateUserAddressDto>,
     res: Response
   ) => {
     if (!user) {
@@ -124,23 +131,81 @@ export class UserController implements IUserController {
     }
 
     const errors = await validateDtos(
-      plainToInstance(UpdateUserProfileCoordinateDto, body)
+      plainToInstance(CreateUserAddressDto, body)
     )
     if (errors) {
       throw new BadReqError(JSON.stringify(errors))
     }
-    const updatedUserProfile =
-      await this.userService.updateUserProfileCoordinate(user.id, body)
 
-    if (!updatedUserProfile) {
+    const address = await this.userService.createUserAddress(user.id, body)
+
+    res.json({
+      success: true,
+      error: null,
+      response: { address },
+    })
+  }
+
+  updateUserAddress = async (
+    {
+      body,
+      user,
+      params: { id },
+    }: Request<{ id?: string }, unknown, UpdateUserAddressDto>,
+    res: Response
+  ) => {
+    const parsedId = Number(id)
+    if (!parsedId) {
+      throw new BadReqError()
+    }
+    if (!user) {
+      throw new UnauthorizedError()
+    }
+
+    const errors = await validateDtos(
+      plainToInstance(UpdateUserAddressDto, body)
+    )
+    if (errors) {
+      throw new BadReqError(JSON.stringify(errors))
+    }
+    const updatedAddress = await this.userService.updateUserAddress(
+      { id: parsedId, userId: user.id },
+      body
+    )
+
+    if (!updatedAddress) {
       throw new NotFoundError()
     }
 
     res.json({
       success: true,
       error: null,
-      response: { profile: updatedUserProfile },
+      response: { address: updatedAddress },
     })
+  }
+
+  deleteUserAddress = async (
+    { user, params: { id } }: Request<{ id?: string }, unknown>,
+    res: Response
+  ) => {
+    const parsedId = Number(id)
+    if (!id || !parsedId) {
+      throw new BadReqError()
+    }
+
+    if (!user) {
+      throw new UnauthorizedError()
+    }
+    const deletedAddress = await this.userService.deleteUserAddress(
+      parsedId,
+      user.id
+    )
+
+    if (!deletedAddress.affected) {
+      throw new BadReqError()
+    }
+
+    res.json({ success: true, error: null, response: null })
   }
 
   deleteUser = async (

@@ -8,8 +8,4 @@ export class FindUserByNickNameDto {
   @IsString()
   @MaxLength(16)
   nickname!: string
-
-  //   constructor({ nickname }: { nickname: string }) {
-  //     this.nickname = nickname
-  //   }
 }

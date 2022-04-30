@@ -24,8 +24,11 @@ afterAll(async () => {
 describe('find user by id test', () => {
   describe('GET /api/v1/users', () => {
     const URL = '/api/v1/users'
-    it('Body가 유효하지 않으면, 400 반환', async () => {
-      const res = await request(await createApp()).get(`${URL}`)
+    it('Query String이 유효하지 않으면, 400 반환', async () => {
+      const nickname = null
+      const res = await request(await createApp())
+        .get(`${URL}`)
+        .query({ nickname })
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     })
@@ -34,21 +37,21 @@ describe('find user by id test', () => {
       const nickname = '12345678901234567'
       const res = await request(await createApp())
         .get(`${URL}`)
-        .send({ nickname })
+        .query({ nickname })
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     })
 
-    it('nickname이 없으면, 404 반환', async () => {
+    it('Nickname 없으면, 200 반환', async () => {
       const nickname = 'kim'
       const res = await request(await createApp())
         .get(`${URL}`)
-        .send({ nickname })
+        .query({ nickname })
 
-      expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      expect(res.status).toBe(StatusCodes.OK)
     })
 
-    it('성공 시, 200 반환', async () => {
+    it('Nickname 이미 존재 시, 400 반환', async () => {
       const userService = Container.get(UserService)
       const data: CreateUserDto = {
         email: 'tset@gmail.com',
@@ -60,9 +63,9 @@ describe('find user by id test', () => {
 
       const res = await request(await createApp())
         .get(`${URL}`)
-        .send({ nickname })
+        .query({ nickname })
 
-      expect(res.status).toBe(StatusCodes.OK)
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     })
   })
 })
