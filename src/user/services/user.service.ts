@@ -1,8 +1,10 @@
 import { Service } from 'typedi'
 import { IUserService } from '..'
 import {
+  CreateUserAddressDto,
   CreateUserDto,
   FindUserByEmailDto,
+  UpdateUserAddressDto,
   UpdateUserProfileDto,
 } from '../dtos'
 import { UserRepository } from '../repositories'
@@ -24,8 +26,27 @@ export class UserService implements IUserService {
     return this.userRepository.findUserByEmail(email)
   }
 
+  findUserByNickName(nickname: string) {
+    return this.userRepository.findUserByNickName(nickname)
+  }
+
   updateUserProfile(id: number, data: UpdateUserProfileDto) {
     return this.userRepository.updateUserProfile(id, data)
+  }
+
+  updateUserAddress(
+    ids: { id: number; userId: number },
+    data: UpdateUserAddressDto
+  ) {
+    return this.userRepository.updateUserAddress(ids, data)
+  }
+
+  createUserAddress(id: number, data: CreateUserAddressDto) {
+    return this.userRepository.createUserAddress(id, data)
+  }
+
+  deleteUserAddress(id: number, userId: number) {
+    return this.userRepository.deleteUserAddress(id, userId)
   }
 
   deleteUser(id: number) {

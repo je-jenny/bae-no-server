@@ -15,7 +15,9 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface AuthInfo {}
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    export interface User extends IUser {}
+    export interface User extends IUser {
+      accessToken?: string
+    }
 
     // TODO Response 어떻게 덮어쓰지?
     // eslint-disable-next-line @typescript-eslint/no-empty-interface

@@ -5,5 +5,9 @@ jest.mock('./src/middlewares/authenticate-handler.ts', () => {
       req.user = { id: 1 }
       next()
     }),
+
+    isUnAuthenticate: jest.fn(async (req, res, next) => {
+      next()
+    }),
   }
 })
