@@ -33,6 +33,13 @@ export class UserService implements IUserService {
     return this.userRepository.updateUserProfile(id, data)
   }
 
+  updateUserProfileCoordinate(
+    id: number,
+    data: { longitude: number; latitude: number }
+  ) {
+    return this.userRepository.updateUserProfileCoordinate(id, data)
+  }
+
   deleteUser(id: number) {
     return this.userRepository.deleteUser(id)
   }
