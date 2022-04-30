@@ -41,6 +41,9 @@ export class UserProfile extends BaseEntity {
   save_money!: number
 
   @Column({ nullable: true })
+  address?: string
+
+  @Column({ nullable: true })
   latitude?: number
 
   @Column({ nullable: true })

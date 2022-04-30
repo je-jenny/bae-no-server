@@ -4,6 +4,7 @@ import { DB } from '../../db'
 import {
   CreateUserDto,
   FindUserByNickNameDto,
+  UpdatedUserLongLatiReturnDto,
   UpdatedUserReturnDto,
   UpdateUserProfileDto,
 } from '../dtos'
@@ -11,9 +12,9 @@ import { User, UserProfile } from '../entities'
 
 @Service()
 export class UserRepository {
-  userRespotiry
+  private userRespotiry
 
-  userProfileRespotiry
+  private userProfileRespotiry
 
   private dataSource
 
@@ -68,6 +69,22 @@ export class UserRepository {
       .execute()
 
     return plainToInstance(UpdatedUserReturnDto, result.raw[0])
+  }
+
+  async updateUserProfileCoordinate(
+    userId: number,
+    data: { longitude: number; latitude: number }
+  ) {
+    const result = await this.userProfileRespotiry
+      .createQueryBuilder()
+      .update(UserProfile)
+      .set(data)
+      .where('userId = :userId', { userId })
+      .returning(['id', 'longitude', 'latitude'])
+      .updateEntity(true)
+      .execute()
+
+    return plainToInstance(UpdatedUserLongLatiReturnDto, result.raw[0])
   }
 
   deleteUser(id: number) {
