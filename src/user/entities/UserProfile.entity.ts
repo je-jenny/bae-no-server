@@ -40,6 +40,12 @@ export class UserProfile extends BaseEntity {
   @Column({ default: 0 })
   save_money!: number
 
+  @Column({ nullable: true })
+  latitude?: number
+
+  @Column({ nullable: true })
+  longitude?: number
+
   @Column()
   userId!: number
 
