@@ -7,7 +7,6 @@ import {
   IsString,
 } from 'class-validator'
 
-@Expose()
 export class CreateUserAddressDto {
   @Expose()
   @IsDefined()
