@@ -4,6 +4,8 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import passport from 'passport'
 import session from 'express-session'
 import Container from 'typedi'
+import cors from 'cors'
+import helmet from 'helmet'
 import { userRouter } from './user/routes'
 import {
   logHttpErrorMiddleware,
@@ -11,7 +13,7 @@ import {
   logInternalServerErrorMiddleware,
 } from './middlewares'
 import passportConfig from './passports'
-import { SESSION_OPTION } from './config'
+import { CLIENT_DOMAIN, SESSION_OPTION } from './config'
 import { authRouter } from './auth'
 import { Redis } from './db'
 
@@ -20,6 +22,8 @@ export function createApp() {
   const RedisStore = redis.getRedisStore()
   const app = express()
 
+  app.use(helmet())
+  app.use(cors({ origin: [CLIENT_DOMAIN], credentials: true }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
 

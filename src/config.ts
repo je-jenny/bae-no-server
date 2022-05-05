@@ -45,6 +45,7 @@ export const ORM_CONFIG: DataSourceOptions = isProd
     }
 
 export const REDIS_URL = process.env.REDIS_URL || 'localhost:6379'
+export const CLIENT_DOMAIN = process.env.CLIENT_DOMAIN || 'localhost:3001'
 
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 14 // 30일
 export const SESSION_OPTION = {
