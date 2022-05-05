@@ -8,11 +8,15 @@ export default () => {
     return done(null, user)
   })
   passport.deserializeUser(async (user: User, done) => {
-    try {
-      return done(null, user) // req.user
-    } catch (error) {
-      return done(error)
+    if (!user) {
+      return done(new Error())
     }
+    return done(null, user)
+    // try {
+    //   return done(null, user) // req.user
+    // } catch (error) {
+    //   return done(error)
+    // }
   })
 
   google()

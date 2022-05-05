@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Router } from 'express'
 import passport from 'passport'
 import Container from 'typedi'
+import { CLIENT_DOMAIN } from '../config'
 import { wrap } from '../controller-wrapper'
 import { BadReqError } from '../http-error.class'
 import { logger } from '../logger'
@@ -28,7 +29,7 @@ authRouter.get(
     failureRedirect: '/',
   }),
   (_, res) => {
-    res.redirect('/')
+    res.redirect(CLIENT_DOMAIN)
   }
 )
 
@@ -39,7 +40,7 @@ authRouter.get(
     failureRedirect: '/',
   }),
   (_, res) => {
-    res.redirect('/')
+    res.redirect(CLIENT_DOMAIN)
   }
 )
 
@@ -63,7 +64,7 @@ authRouter.get('/logout', isAuthenticate, async (req, res) => {
 
     logger.info(JSON.stringify(req.user, replaceErrors))
     req.logOut()
-    res.redirect('/')
+    res.redirect(CLIENT_DOMAIN)
   })
 })
 
