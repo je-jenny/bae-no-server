@@ -17,8 +17,8 @@ import { CLIENT_DOMAIN, SESSION_OPTION } from './config'
 import { authRouter } from './auth'
 import { Redis } from './db'
 
+const redis = Container.get(Redis)
 export function createApp() {
-  const redis = Container.get(Redis)
   const RedisStore = redis.getRedisStore()
   const app = express()
 

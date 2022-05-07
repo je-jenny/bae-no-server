@@ -21,31 +21,34 @@ export const TEST_CONFIG: DataSourceOptions = {
   logging: false,
 }
 
-export const ORM_CONFIG: DataSourceOptions = isProd
-  ? {
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: 5432,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities,
-      logging: true,
-    }
-  : {
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
-      port: 5432,
-      username: process.env.POSTGRES_USER || 'test',
-      password: process.env.POSTGRES_PASSWORD || 'test',
-      database: process.env.POSTGRES_DB || 'test',
-      synchronize: true,
-      entities,
-      logging: true,
-    }
+const LOCAL_CONFIG: DataSourceOptions = {
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'postgres',
+  synchronize: true,
+  entities,
+  logging: true,
+}
+const PROD_CONFIG: DataSourceOptions = {
+  type: 'postgres',
+  host: process.env.POSTGRES_HOST,
+  port: 5432,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
+  entities,
+  logging: true,
+}
 
-export const REDIS_URL = process.env.REDIS_URL || 'localhost:6379'
+export const ORM_CONFIG: DataSourceOptions = isProd ? PROD_CONFIG : LOCAL_CONFIG
+
+export const REDIS_URL = process.env.REDIS_URL
 export const CLIENT_DOMAIN = process.env.CLIENT_DOMAIN || 'localhost:3001'
+
+export const JWT_SECRET = process.env.JWT_SECRET || ''
 
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 14 // 30일
 export const SESSION_OPTION = {

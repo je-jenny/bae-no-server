@@ -36,13 +36,13 @@ export class UserController implements IUserController {
   //   }
 
   findUserById = async (
-    { params: { id }, user }: Request<{ id?: string }>,
+    { params: { id }, id: userId }: Request<{ id?: string }>,
     res: Response
   ) => {
     if (!id) {
       throw new BadReqError()
     }
-    const parsedId = id === 'me' ? user!.id : Number(id)
+    const parsedId = id === 'me' ? Number(userId) : Number(id)
     if (!parsedId) {
       throw new BadReqError()
     }
@@ -89,16 +89,19 @@ export class UserController implements IUserController {
   updateUserProfile = async (
     {
       body,
-      user,
+      id: userId,
       params: { id },
     }: Request<{ id?: string }, unknown, UpdateUserProfileDto>,
     res: Response
   ) => {
-    if (!user || !id || !Number(id)) {
+    const parsedUserId = Number(userId)
+    const parsedParamId = Number(id)
+
+    if (!parsedUserId || !id || !parsedParamId) {
       throw new BadReqError()
     }
 
-    if (user.id !== Number(id)) {
+    if (parsedUserId !== Number(id)) {
       throw new UnauthorizedError()
     }
 
@@ -107,7 +110,7 @@ export class UserController implements IUserController {
       throw new BadReqError(JSON.stringify(errors))
     }
     const updatedUserProfile = await this.userService.updateUserProfile(
-      user.id,
+      parsedUserId,
       body
     )
 
@@ -123,10 +126,11 @@ export class UserController implements IUserController {
   }
 
   createUserAddress = async (
-    { body, user }: Request<unknown, unknown, CreateUserAddressDto>,
+    { body, id: userId }: Request<unknown, unknown, CreateUserAddressDto>,
     res: Response
   ) => {
-    if (!user) {
+    const parsedUserId = Number(userId)
+    if (!parsedUserId) {
       throw new UnauthorizedError()
     }
 
@@ -137,7 +141,7 @@ export class UserController implements IUserController {
       throw new BadReqError(JSON.stringify(errors))
     }
 
-    const address = await this.userService.createUserAddress(user.id, body)
+    const address = await this.userService.createUserAddress(parsedUserId, body)
 
     res.json({
       success: true,
@@ -149,16 +153,18 @@ export class UserController implements IUserController {
   updateUserAddress = async (
     {
       body,
-      user,
+      id: userId,
       params: { id },
     }: Request<{ id?: string }, unknown, UpdateUserAddressDto>,
     res: Response
   ) => {
+    const parsedUserId = Number(userId)
     const parsedId = Number(id)
+
     if (!parsedId) {
       throw new BadReqError()
     }
-    if (!user) {
+    if (!parsedUserId) {
       throw new UnauthorizedError()
     }
 
@@ -169,7 +175,7 @@ export class UserController implements IUserController {
       throw new BadReqError(JSON.stringify(errors))
     }
     const updatedAddress = await this.userService.updateUserAddress(
-      { id: parsedId, userId: user.id },
+      { id: parsedId, userId: parsedUserId },
       body
     )
 
@@ -185,20 +191,22 @@ export class UserController implements IUserController {
   }
 
   deleteUserAddress = async (
-    { user, params: { id } }: Request<{ id?: string }, unknown>,
+    { id: userId, params: { id } }: Request<{ id?: string }, unknown>,
     res: Response
   ) => {
+    const parsedUserId = Number(userId)
     const parsedId = Number(id)
+
     if (!id || !parsedId) {
       throw new BadReqError()
     }
 
-    if (!user) {
+    if (!parsedUserId) {
       throw new UnauthorizedError()
     }
     const deletedAddress = await this.userService.deleteUserAddress(
       parsedId,
-      user.id
+      parsedUserId
     )
 
     if (!deletedAddress.affected) {
@@ -209,18 +217,21 @@ export class UserController implements IUserController {
   }
 
   deleteUser = async (
-    { user, params: { id } }: Request<{ id?: string }, unknown>,
+    { id: userId, params: { id } }: Request<{ id?: string }, unknown>,
     res: Response
   ) => {
-    if (!user || !id || !Number(id)) {
+    const parsedUserId = Number(userId)
+    const parsedParamId = Number(id)
+
+    if (!parsedUserId || !id || !parsedParamId) {
       throw new BadReqError()
     }
 
-    if (user.id !== Number(id)) {
+    if (parsedUserId !== parsedParamId) {
       throw new UnauthorizedError()
     }
 
-    const deletedUser = await this.userService.deleteUser(user.id)
+    const deletedUser = await this.userService.deleteUser(parsedUserId)
 
     if (!deletedUser.affected) {
       throw new BadReqError()

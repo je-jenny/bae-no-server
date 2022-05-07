@@ -11,7 +11,6 @@ export default () => {
   passport.use(
     new GoogleStrategy(
       {
-        // TODO 배포용 수정 필요
         ...GOOGLE_CONFIG,
       },
       async (_accessToken, _refreshToken, profile, cb) => {
@@ -20,6 +19,7 @@ export default () => {
         if (!email) {
           return cb(new NotFoundError('Not Found Email'))
         }
+
         const user = await userService.findUserByEmail({ email })
 
         if (!user) {
