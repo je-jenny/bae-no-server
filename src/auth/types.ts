@@ -29,4 +29,5 @@ export interface IAuthService {
 export interface IAuthController {
   createVerification: (req: Request, res: Response) => Promise<void>
   verifyCode: (req: Request, res: Response) => Promise<void>
+  refreshJWT: (req: Request, res: Response) => Promise<void>
 }
