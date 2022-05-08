@@ -1,14 +1,13 @@
 import type { DataSourceOptions } from 'typeorm'
 import type { _StrategyOptionsBase } from 'passport-google-oauth20'
 import { StrategyOption } from 'passport-kakao'
+import { RedisClientOptions } from 'redis'
 
 export const PORT = process.env.PORT || 3000
 
-export const isProd = process.env.NODE_ENV === 'production'
-
 const entities = ['**/*.entity.js']
 
-export const TEST_CONFIG: DataSourceOptions = {
+const TEST_CONFIG: DataSourceOptions = {
   type: 'postgres',
   port: 5432,
   host: 'localhost',
@@ -32,6 +31,19 @@ const LOCAL_CONFIG: DataSourceOptions = {
   entities,
   logging: true,
 }
+
+const DEV_CONFIG: DataSourceOptions = {
+  type: 'postgres',
+  host: process.env.POSTGRES_HOST,
+  port: 5432,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
+  synchronize: true,
+  entities,
+  logging: true,
+}
+
 const PROD_CONFIG: DataSourceOptions = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
@@ -43,14 +55,27 @@ const PROD_CONFIG: DataSourceOptions = {
   logging: true,
 }
 
-export const ORM_CONFIG: DataSourceOptions = isProd ? PROD_CONFIG : LOCAL_CONFIG
+export const ORM_CONFIG: DataSourceOptions =
+  process.env.NODE_ENV === 'test'
+    ? TEST_CONFIG
+    : process.env.NODE_ENV === 'production'
+    ? PROD_CONFIG
+    : process.env.NODE_ENV === 'development'
+    ? DEV_CONFIG
+    : LOCAL_CONFIG
 
-export const REDIS_URL = process.env.REDIS_URL
+export const REDIS_CONFIG: RedisClientOptions =
+  process.env.NODE_ENV === 'production'
+    ? {
+        legacyMode: true,
+        url: process.env.REDIS_URL,
+      }
+    : { legacyMode: true, url: 'redis://redis:6379' }
 export const CLIENT_DOMAIN = process.env.CLIENT_DOMAIN || 'localhost:3001'
 
 export const JWT_SECRET = process.env.JWT_SECRET || ''
 
-const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 14 // 30일
+const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 14 // 14일
 export const SESSION_OPTION = {
   secret: process.env.SESSION_SECRET || 'sesecrcretet',
   saveUninitialized: true,
@@ -79,6 +104,7 @@ export const KAKAO_CONFIG: StrategyOption = {
     'http://www.example.com/auth/google/callback',
 }
 
-// export const CORS_CONFIG: CorsOptions = isProd
-//   ? { origin: CLIENT_DOMAIN, credentials: true }
-//   : { origin: '*' }
+// export const CORS_CONFIG: CorsOptions =
+//   process.env.NODE_ENV === 'production'
+//     ? { origin: [CLIENT_DOMAIN], credentials: true }
+//     : { origin: '*' }

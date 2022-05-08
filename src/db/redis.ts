@@ -4,7 +4,7 @@ import Session from 'express-session'
 import connectRedis from 'connect-redis'
 import { createClient, RedisClientType } from 'redis'
 import { logger } from '../logger'
-import { REDIS_URL } from '../config'
+import { REDIS_CONFIG } from '../config'
 
 const REFRESH_TOKEN_EXPIRES = 60 * 60 * 24 * 14 // 초 단위
 
@@ -31,9 +31,7 @@ export class Redis {
   }
 
   private setRedisClient() {
-    const t = REDIS_URL ? { url: REDIS_URL } : { host: 'localhost', port: 6379 }
-    this.redisClient = createClient({ legacyMode: true, ...t })
-    // this.redisClient = createClient({ legacyMode: true, url: REDIS_URL })
+    this.redisClient = createClient(REDIS_CONFIG)
   }
 
   private setRedisStore(session: typeof Session) {
@@ -59,7 +57,8 @@ export class Redis {
       return
     }
     if (this.retry > 3) {
-      logger.info('Inaccessible over 3 times')
+      logger.info('Inaccessible Redis over 3 times')
+      process.kill(process.pid, 'SIGINT')
       return
     }
     return this.getRedisClient()

@@ -18,6 +18,7 @@ RUN npm ci
 
 FROM base AS prod
 WORKDIR /app
+ENV NODE_ENV=production
 COPY package-lock.json package.json ./
 COPY --from=build /app/dist dist
 RUN npm ci --only=production --ignore-scripts

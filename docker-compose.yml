@@ -20,6 +20,7 @@ services:
         target: /app/logs
     depends_on:
       - postgres
+      - redis
   postgres:
     container_name: bae_nono_postgres
     image: postgres:13-alpine
@@ -37,6 +38,19 @@ services:
     restart: unless-stopped
     volumes:
       - db_data:/var/lib/postgresql/data
+  redis:
+      image: redis:alpine
+      command: redis-server --port 6379
+      container_name: bae_nono_redis
+      hostname: bae_nono_redis
+      restart: unless-stopped
+      networks:
+        - backend
+      labels:
+        - "name=redis"
+        - "mode=standalone"
+      ports:
+        - 6379:6379
       # - ./db/initdb.d:/docker-entrypoint-initdb.d:ro
 
 networks:
