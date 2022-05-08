@@ -3,7 +3,7 @@ import express from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import passport from 'passport'
 import session from 'express-session'
-import Container from 'typedi'
+// import Container from 'typedi'
 import cors from 'cors'
 import helmet from 'helmet'
 import { userRouter } from './user/routes'
@@ -15,11 +15,11 @@ import {
 import passportConfig from './passports'
 import { CLIENT_DOMAIN, SESSION_OPTION } from './config'
 import { authRouter } from './auth'
-import { Redis } from './db'
+// import { Redis } from './db'
 
-const redis = Container.get(Redis)
+// const redis = Container.get(Redis)
 export function createApp() {
-  const RedisStore = redis.getRedisStore()
+  //   const RedisStore = redis.getRedisStore()
   const app = express()
 
   app.use(helmet())
@@ -31,7 +31,7 @@ export function createApp() {
   app.use(
     session({
       ...SESSION_OPTION,
-      store: RedisStore,
+      //   store: RedisStore,
     })
   )
   app.use(passport.initialize())

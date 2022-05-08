@@ -15,6 +15,9 @@ const authController = Container.get(AuthController)
 const redis = Container.get(Redis)
 const authRouter = Router()
 
+const ACCESS_TOKEN_COOKIE = 'x-auth-cookie'
+const REFRESH_TOKEN_COOKIE = 'x-auth-cookie-refresh'
+
 function setCookieAndRedirect() {
   return (req: Request, res: Response) => {
     if (!req.user) {
@@ -25,8 +28,8 @@ function setCookieAndRedirect() {
     const refreshToken = refresh()
     redis.redisSet(String(req.user.id), refreshToken)
 
-    res.cookie('x-auth-cookie', accessToken)
-    res.cookie('x-auth-cookie-refresh', refreshToken)
+    res.cookie(ACCESS_TOKEN_COOKIE, accessToken)
+    res.cookie(REFRESH_TOKEN_COOKIE, refreshToken)
 
     res.redirect(CLIENT_DOMAIN)
   }
@@ -83,8 +86,12 @@ authRouter.get('/logout', authJWT, async (req, res) => {
       throw new BadReqError('session is not destroy')
     }
 
-    logger.info(JSON.stringify(req.user, replaceErrors))
+    logger.info(`${req.id} is logged out.`)
+    // logger.info(JSON.stringify(req.id, replaceErrors))
     req.logOut()
+    res.clearCookie(ACCESS_TOKEN_COOKIE)
+    res.clearCookie(REFRESH_TOKEN_COOKIE)
+
     res.redirect(CLIENT_DOMAIN)
   })
 })

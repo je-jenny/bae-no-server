@@ -1,29 +1,36 @@
 /* eslint-disable no-underscore-dangle */
 import { Service } from 'typedi'
 import { DataSource } from 'typeorm'
-import { ORM_CONFIG, TEST_CONFIG } from '../config'
+import { ORM_CONFIG } from '../config'
 import { logger } from '../logger'
 
 @Service()
 export class DB {
+  private retry = 0
+
   private _AppDataSource
 
   constructor() {
-    this._AppDataSource = new DataSource(
-      process.env.NODE_ENV === 'test' ? TEST_CONFIG : ORM_CONFIG
-    )
+    this._AppDataSource = new DataSource(ORM_CONFIG)
   }
 
   async typeOrmInitialize() {
+    if (this.retry > 0) {
+      logger.info('Inaccessible Pg over 3 times')
+      process.kill(process.pid, 'SIGINT')
+      return
+    }
     await this._AppDataSource
       .initialize()
       .then(() => {
         logger.info('Data Source has been initialized!')
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        this.retry += 1
         logger.error(
           `Error during Data Source initialization ${JSON.stringify(err)}`
         )
+        await this.typeOrmInitialize()
       })
   }
 
