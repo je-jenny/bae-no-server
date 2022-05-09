@@ -39,7 +39,7 @@ authRouter
   .post('', wrap(authController.createVerification))
   .delete('/:id', authJWT, wrap(authController.verifyCode))
 
-authRouter.get('/refresh', wrap(authController.refreshJWT))
+authRouter.post('/refresh', wrap(authController.refreshJWT))
 
 authRouter.get(
   '/google',

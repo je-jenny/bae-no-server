@@ -92,15 +92,19 @@ export class AuthController implements IAuthController {
     res.json({ success: true, error: null, response: null })
   }
 
-  refreshJWT = async (req: Request, res: Response) => {
-    if (!req.headers.authorization || !req.headers.refresh) {
+  refreshJWT = async (
+    req: Request<unknown, unknown, { refresh: string }>,
+    res: Response
+  ) => {
+    const refreshToken = req.body.refresh
+    if (!req.headers.authorization || !refreshToken) {
       throw new BadReqError(
         'Access token and Refresh token are need for refresh!'
       )
     }
 
     const accessToken = req.headers.authorization.split('Bearer ')[1]
-    const refreshToken = req.headers.refresh as string
+    // const refreshToken = req.headers.refresh as string
 
     const authResult = verify(accessToken)
     const decoded = jwt.decode(accessToken) as JwtPayload

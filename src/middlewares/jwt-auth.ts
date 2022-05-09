@@ -14,6 +14,6 @@ export const authJWT = (req: Request, res: Response, next: NextFunction) => {
     throw new UnauthorizedError(result.message)
   }
 
-  req.id = result.id!
+  req.id = result.id
   next()
 }

@@ -7,6 +7,7 @@ import { User } from '../user'
 const JWT_ALGORITHM = 'HS256'
 const ACCESS_TOKEN_EXPIRES = '1h'
 const REFRESH_TOKEN_EXPIRES = '14d'
+const JWT_ISSUEER = 'bae-no'
 const redis = Container.get(Redis)
 
 export type JwtPayload = { id: string }
@@ -17,10 +18,14 @@ export const sign = (user: User) => {
   return jwt.sign(payload, JWT_SECRET, {
     algorithm: JWT_ALGORITHM,
     expiresIn: ACCESS_TOKEN_EXPIRES,
+    issuer: JWT_ISSUEER,
+    subject: 'access_token',
   })
 }
 
-export const verify = (token: string) => {
+export const verify = (
+  token: string
+): { ok: true; id: string } | { ok: false; message: string } => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload
 
@@ -37,6 +42,8 @@ export const refresh = () => {
   return jwt.sign({}, JWT_SECRET, {
     algorithm: JWT_ALGORITHM,
     expiresIn: REFRESH_TOKEN_EXPIRES,
+    issuer: JWT_ISSUEER,
+    subject: 'refresh_token',
   })
 }
 

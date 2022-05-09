@@ -11,6 +11,7 @@ import {
   logHttpErrorMiddleware,
   logDBErrorMiddleware,
   logInternalServerErrorMiddleware,
+  requestHandler,
 } from './middlewares'
 import passportConfig from './passports'
 import { CLIENT_DOMAIN, SESSION_OPTION } from './config'
@@ -36,6 +37,8 @@ export function createApp() {
   )
   app.use(passport.initialize())
   app.use(passport.session())
+
+  app.use(requestHandler)
 
   app.get('/health', (_, res) => {
     res.send(ReasonPhrases.OK)
