@@ -7,6 +7,7 @@ import {
 } from 'typeorm'
 import { UserProfile, Address } from '.'
 import { BaseEntity } from '../../common'
+import { ParticipateIn, Message } from '../../chat/entities'
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -28,4 +29,10 @@ export class User extends BaseEntity {
     cascade: ['soft-remove'],
   })
   address?: Address[]
+
+  @OneToMany(() => Message, (messages) => messages.user)
+  messages?: Promise<Message[]>;
+
+  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.userId)
+  participateIn?: ParticipateIn[];
 }
