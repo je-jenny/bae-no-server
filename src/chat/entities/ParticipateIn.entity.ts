@@ -1,11 +1,17 @@
-import { Column, Entity, JoinColumn, ManyToOne, Unique, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  Unique,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 import { Room } from '.'
 import { User } from '../../user/entities'
 
 @Entity('participate_in', { schema: 'public' })
 @Unique('index_participate_relation', ['roomId', 'userId'])
 export class ParticipateIn {
-
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id!: number
 
