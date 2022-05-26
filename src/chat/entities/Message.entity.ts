@@ -1,15 +1,14 @@
 import {
   Column,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from "typeorm"
-import { Room } from "."
-import { User } from "../../user/entities"
+} from 'typeorm'
+import { Room } from '.'
+import { User } from '../../user/entities'
 
-@Entity("messages", { schema: "public" })
+@Entity('messages', { schema: 'public' })
 export class Message {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id!: number
