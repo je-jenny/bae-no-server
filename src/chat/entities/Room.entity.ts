@@ -1,15 +1,16 @@
 import {
   Column,
   Entity,
-  Index,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm"
-import { BaseEntity } from "../../common"
-import { ParticipateIn, Message } from "."
+} from 'typeorm'
+import { BaseEntity } from '../../common'
+import { Message } from '.'
+import { User } from '../../user/entities'
 
-@Index("rooms_pkey", ["id"], { unique: true })
-@Entity("rooms", { schema: "public" })
+@Entity({ name: 'rooms' })
 export class Room extends BaseEntity {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id!: number
@@ -37,6 +38,20 @@ export class Room extends BaseEntity {
   @OneToMany(() => Message, (messages) => messages.room)
   messages?: Message[]
 
-  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.roomId)
-  participateIn?: ParticipateIn[]
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: "participate_in",
+    joinColumn: {
+      name: "room_id",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "user_id",
+      referencedColumnName: "id"
+    }
+  })
+  users?: Promise<User[]>;
+
+  // @OneToMany(() => ParticipateIn, (participateIn) => participateIn.roomId)
+  // participateIn?: ParticipateIn[]
 }

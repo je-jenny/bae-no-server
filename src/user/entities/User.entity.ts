@@ -4,10 +4,11 @@ import {
   Column,
   OneToOne,
   OneToMany,
+  ManyToMany,
 } from 'typeorm'
 import { UserProfile, Address } from '.'
 import { BaseEntity } from '../../common'
-import { ParticipateIn, Message } from '../../chat/entities'
+import { Message, Room } from '../../chat/entities'
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -30,9 +31,9 @@ export class User extends BaseEntity {
   })
   address?: Address[]
 
-  @OneToMany(() => Message, (messages) => messages.user)
-  messages?: Promise<Message[]>;
+  @OneToMany(() => Message, (message) => message.user)
+  messages?: Promise<Message[]>
 
-  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.userId)
-  participateIn?: ParticipateIn[];
+  // @OneToMany(() => ParticipateIn, (participateIn) => participateIn.userId)
+  // participateIn?: ParticipateIn[]
 }
