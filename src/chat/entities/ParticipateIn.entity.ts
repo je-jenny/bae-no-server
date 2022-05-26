@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, Unique, PrimaryGeneratedColumn }
 import { Room } from '.'
 import { User } from '../../user/entities'
 
-@Entity('participate_id', { schema: 'public' })
+@Entity('participate_in', { schema: 'public' })
 @Unique('index_participate_relation', ['roomId', 'userId'])
 export class ParticipateIn {
 
