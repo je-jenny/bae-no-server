@@ -13,9 +13,11 @@ export default () => {
       { ...KAKAO_CONFIG },
       async (accessToken, _refreshToken, profile, cb) => {
         // eslint-disable-next-line no-underscore-dangle
-        const { has_email, email } = profile._json.kakao_account
-        if (!has_email || !email) {
-          return cb(new NotFoundError('Not Found Email'))
+        const { email } = profile._json.kakao_account
+        if (!email) {
+          return cb(
+            new NotFoundError('You must agree to use your Kakao account email')
+          )
         }
         const user = await userService.findUserByEmail({ email })
 
