@@ -7,6 +7,7 @@ import session from 'express-session'
 import cors from 'cors'
 import helmet from 'helmet'
 import { userRouter } from './user/routes'
+import { roomRouter } from './chat/routes'
 import {
   logHttpErrorMiddleware,
   logDBErrorMiddleware,
@@ -46,6 +47,7 @@ export function createApp() {
 
   app.use('/api/v1/users', userRouter)
   app.use('/api/v1/auths', authRouter)
+  app.use('/api/v1/rooms', roomRouter)
 
   app.use('*', (_, res) => {
     res.status(StatusCodes.NOT_FOUND)

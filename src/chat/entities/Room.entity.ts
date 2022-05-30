@@ -1,11 +1,12 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { BaseEntity } from '../../common'
 import { ParticipateIn, Message } from '.'
+
+export enum DealStatus {
+  OPENED = 'opened',
+  CLOSED = 'closed',
+  // TODO: 생성자에 의해 파기된 방 구분 필요?
+}
 
 @Entity('rooms', { schema: 'public' })
 export class Room extends BaseEntity {
@@ -26,15 +27,32 @@ export class Room extends BaseEntity {
   @Column('character varying', { name: 'food_category', length: 32 })
   foodCategory!: string
 
-  @Column('smallint', { name: 'max_user' })
-  maxUser!: number
+  @Column('character varying', { name: 'restaurant_name', length: 32 })
+  restaurantName!: string
+
+  @Column('smallint', { name: 'min_user' })
+  minUser!: number
+
+  // TODO: 최대인원 필요?
+  // @Column('smallint', { name: 'max_user' })
+  // maxUser!: number
 
   @Column('integer', { name: 'delivery_fee' })
   deliveryFee!: number
 
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: DealStatus,
+    default: DealStatus.OPENED,
+  })
+  status!: DealStatus
+
   @OneToMany(() => Message, (messages) => messages.room)
   messages?: Message[]
 
-  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.roomId)
+  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.room, {
+    cascade: true,
+  })
   participateIn?: ParticipateIn[]
 }

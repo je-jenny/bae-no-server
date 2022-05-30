@@ -33,6 +33,6 @@ export class User extends BaseEntity {
   @OneToMany(() => Message, (messages) => messages.user)
   messages?: Promise<Message[]>
 
-  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.userId)
+  @OneToMany(() => ParticipateIn, (participateIn) => participateIn.user)
   participateIn?: ParticipateIn[]
 }
