@@ -30,12 +30,11 @@ export class Room extends BaseEntity {
   @Column('character varying', { name: 'restaurant_name', length: 32 })
   restaurantName!: string
 
-  @Column('smallint', { name: 'min_user' })
+  @Column('smallint', { name: 'min_user', default: 2 })
   minUser!: number
 
-  // TODO: 최대인원 필요?
-  // @Column('smallint', { name: 'max_user' })
-  // maxUser!: number
+  @Column('smallint', { name: 'max_user', default: 10 })
+  maxUser!: number
 
   @Column('integer', { name: 'delivery_fee' })
   deliveryFee!: number

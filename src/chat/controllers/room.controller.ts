@@ -10,9 +10,7 @@ import { IRoomController } from '../types'
 
 @Service()
 export class RoomController implements IRoomController {
-  constructor(
-    private readonly roomService: RoomService,
-  ) {}
+  constructor(private readonly roomService: RoomService) {}
 
   createRoom = async (
     { body }: Request<unknown, unknown, CreateRoomDto>,
